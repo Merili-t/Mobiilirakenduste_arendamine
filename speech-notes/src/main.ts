@@ -129,22 +129,34 @@ async function start() {
   await SpeechRecognition.addListener('partialResults', (data) => {
     draft.value = data.matches?.[0] ?? '';
   });
-  setRecording(true);
-  await SpeechRecognition.start({
-    language: 'et-EE',
-    partialResults: true,
-    popup: false,
+  await SpeechRecognition.addListener('listeningState', (data) => {
+    if (data.status === 'stopped') setRecording(false);
   });
+  setRecording(true);
+  try {
+    await SpeechRecognition.start({
+      language: 'et-EE',
+      partialResults: true,
+      popup: false,
+    });
+  } catch (e: any) {
+    live.textContent = 'Viga: ' + (e?.message ?? e);
+    setRecording(false);
+  }
 }
 
 async function stopRecording() {
-  if (Capacitor.isNativePlatform()) {
-    await SpeechRecognition.stop();
-    await SpeechRecognition.removeAllListeners();
-  } else {
-    webRec?.stop();
-  }
   setRecording(false);
+  try {
+    if (Capacitor.isNativePlatform()) {
+      await SpeechRecognition.stop();
+      await SpeechRecognition.removeAllListeners();
+    } else {
+      webRec?.stop();
+    }
+  } catch (e: any) {
+    live.textContent = 'Viga: ' + (e?.message ?? e);
+  }
 }
 
 async function saveDraft() {
