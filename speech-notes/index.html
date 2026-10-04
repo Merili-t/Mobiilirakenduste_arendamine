@@ -9,7 +9,32 @@
     <title>Speech Notes</title>
   </head>
   <body>
-    <ion-app></ion-app>
+    <ion-app>
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>Speech Notes</ion-title>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="ion-padding">
+        <ion-button id="record-btn">
+          <ion-icon slot="start" name="mic"></ion-icon>
+          <span id="record-label">Räägi märkus</span>
+        </ion-button>
+        <ion-button id="clear-btn" fill="outline" color="medium">Kustuta kõik</ion-button>
+        <p id="live-text"></p>
+        <ion-textarea
+          id="draft"
+          label="Muuda märkust"
+          label-placement="stacked"
+          fill="outline"
+          auto-grow="true"
+          rows="3"
+        ></ion-textarea>
+        <ion-button id="save-btn">Salvesta märkus</ion-button>
+        <ion-button id="cancel-btn" fill="outline" color="medium">Tühista</ion-button>
+        <ion-list id="notes-list"></ion-list>
+      </ion-content>
+    </ion-app>
 
     <script type="module" src="/src/main.ts"></script>
   </body>
