@@ -4,25 +4,25 @@ Ionic 8.8, Capacitor 8.5, TypeScript, Web Components (non-React)
 ## Paigaldus juhis
 Kloonimine ja kõigi sõltuvuste installimine ühe käsuga:
 
-npm install
+* npm install
 
 npm install loeb package.json ja package-lock.json failid ning installib automaatselt kõik projektis kasutatavad paketid (Ionic, Capacitor, kõnetuvastuse plugin, jne)
 
 ## Brauseris käivitamine
-npm run dev
+* npm run dev
 
 ## Build ja Capacitor'i sünkroonimine
 
 Enne natiivsete platvormide käivitamist tuleb projekt build'ida ja Capacitor'iga sünkroonida:
-
-npm run build
-npx cap sync
+* npm run build
+* npx cap sync android
+* npx cap run android
 
 Seda tuleb korrata iga kord, kui teed muudatusi src/ kaustas ja tahad neid natiivses äpis näha (v.a. kui kasutad live-reload'i, vt Capacitor'i dokumentatsiooni).
 
 ## Käivitamine Android emulaatoris
 
-npx cap open android
+* npx cap open android
 
 See avab projekti Android Studios. Vali ülevalt AVD (Android Virtual Device) ripploendist ja vajuta Run.
 
