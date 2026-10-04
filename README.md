@@ -16,7 +16,8 @@ npm run dev
 Enne natiivsete platvormide käivitamist tuleb projekt build'ida ja Capacitor'iga sünkroonida:
 
 npm run build
-npx cap sync
+npx cap sync android
+npx cap run android
 
 Seda tuleb korrata iga kord, kui teed muudatusi src/ kaustas ja tahad neid natiivses äpis näha (v.a. kui kasutad live-reload'i, vt Capacitor'i dokumentatsiooni).
 
