@@ -78,7 +78,8 @@ async function load() {
 function setRecording(on: boolean) {
   recording = on;
   label.textContent = on ? 'Peata' : 'Räägi märkus';
-  icon.setAttribute('name', on ? 'stop' : 'mic');
+  (icon as any).name = on ? 'stop' : 'mic';
+  btn.setAttribute('color', on ? 'danger' : 'primary');
 }
 
 // Brauseri Web Speech API (ainult testimiseks, Chrome/Edge)
@@ -106,6 +107,7 @@ function startWeb() {
     live.textContent = 'Viga: ' + e.error;
     setRecording(false);
   };
+  webRec.onend = () => setRecording(false);
   webRec.start();
   setRecording(true);
 }
@@ -149,8 +151,11 @@ async function stopRecording() {
   setRecording(false);
   try {
     if (Capacitor.isNativePlatform()) {
-      await SpeechRecognition.stop();
-      await SpeechRecognition.removeAllListeners();
+      // Pluginaga stop() kutsel puudub resolve(), seega ei tohi seda lõputult oodata
+      await Promise.race([
+        SpeechRecognition.stop(),
+        new Promise((resolve) => setTimeout(resolve, 500)),
+      ]);
     } else {
       webRec?.stop();
     }
