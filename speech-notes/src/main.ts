@@ -69,9 +69,20 @@ async function save() {
   await Preferences.set({ key: KEY, value: JSON.stringify(notes) });
 }
 
+function isNotes(x: unknown): x is Note[] {
+  return Array.isArray(x) && x.every(
+    (n) => typeof n?.id === 'number' && typeof n?.text === 'string'
+  );
+}
+
 async function load() {
   const { value } = await Preferences.get({ key: KEY });
-  notes = value ? JSON.parse(value) : [];
+  try {
+    const data: unknown = value ? JSON.parse(value) : [];
+    notes = isNotes(data) ? data : [];
+  } catch {
+    notes = [];
+  }
   render();
 }
 
