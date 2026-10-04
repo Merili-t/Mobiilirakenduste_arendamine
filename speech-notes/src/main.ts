@@ -69,16 +69,28 @@ async function save() {
   await Preferences.set({ key: KEY, value: JSON.stringify(notes) });
 }
 
+function isNotes(x: unknown): x is Note[] {
+  return Array.isArray(x) && x.every(
+    (n) => typeof n?.id === 'number' && typeof n?.text === 'string'
+  );
+}
+
 async function load() {
   const { value } = await Preferences.get({ key: KEY });
-  notes = value ? JSON.parse(value) : [];
+  try {
+    const data: unknown = value ? JSON.parse(value) : [];
+    notes = isNotes(data) ? data : [];
+  } catch {
+    notes = [];
+  }
   render();
 }
 
 function setRecording(on: boolean) {
   recording = on;
   label.textContent = on ? 'Peata' : 'Räägi märkus';
-  icon.setAttribute('name', on ? 'stop' : 'mic');
+  (icon as any).name = on ? 'stop' : 'mic';
+  btn.setAttribute('color', on ? 'danger' : 'primary');
 }
 
 // Brauseri Web Speech API (ainult testimiseks, Chrome/Edge)
@@ -106,6 +118,7 @@ function startWeb() {
     live.textContent = 'Viga: ' + e.error;
     setRecording(false);
   };
+  webRec.onend = () => setRecording(false);
   webRec.start();
   setRecording(true);
 }
@@ -129,22 +142,37 @@ async function start() {
   await SpeechRecognition.addListener('partialResults', (data) => {
     draft.value = data.matches?.[0] ?? '';
   });
-  setRecording(true);
-  await SpeechRecognition.start({
-    language: 'et-EE',
-    partialResults: true,
-    popup: false,
+  await SpeechRecognition.addListener('listeningState', (data) => {
+    if (data.status === 'stopped') setRecording(false);
   });
+  setRecording(true);
+  try {
+    await SpeechRecognition.start({
+      language: 'et-EE',
+      partialResults: true,
+      popup: false,
+    });
+  } catch (e: any) {
+    live.textContent = 'Viga: ' + (e?.message ?? e);
+    setRecording(false);
+  }
 }
 
 async function stopRecording() {
-  if (Capacitor.isNativePlatform()) {
-    await SpeechRecognition.stop();
-    await SpeechRecognition.removeAllListeners();
-  } else {
-    webRec?.stop();
-  }
   setRecording(false);
+  try {
+    if (Capacitor.isNativePlatform()) {
+      // Pluginaga stop() kutsel puudub resolve(), seega ei tohi seda lõputult oodata
+      await Promise.race([
+        SpeechRecognition.stop(),
+        new Promise((resolve) => setTimeout(resolve, 500)),
+      ]);
+    } else {
+      webRec?.stop();
+    }
+  } catch (e: any) {
+    live.textContent = 'Viga: ' + (e?.message ?? e);
+  }
 }
 
 async function saveDraft() {
