@@ -15,7 +15,7 @@ Projekt on kirjutatud **TypeScriptis**. See kompileeritakse JavaScriptiks, mis j
 | Raamistik | **Puudub** (vanilla TS) | Angularit, Vue't ega Reacti ei kasutata |
 | Ehitus | Vite (`vite.config.ts`) | Pakib TS-i, Ionic'u komponendid laaditakse laisalt (lazy-loaded) |
 | Sild | Capacitor 8.5 (`capacitor.config.ts`, `android/`, `ios/`) | JS ↔ Swift / Kotlin |
-| Plugin | **[TÄIDA]** nt kõnetuvastus (Capacitor community) | Ligipääs mikrofonile |
+| Pluginad | `@capacitor-community/speech-recognition`, `@capacitor/preferences` | Mikrofon (kõnetuvastus) ja andmete püsisalvestus |
 
 Rakenduse UI kirjutatakse `main.ts`-is otse `<ion-app>` sisse `innerHTML`-iga, ilma lehekomponentideta.
 
@@ -94,7 +94,7 @@ try {
 - Natiivne töö jookseb natiivlõimedes, JS saab ainult vastuse.
 - Rakendus võib minna taustale, enne kui Promise lõpeb. Kasuta `App.addListener('appStateChange', ...)`.
 
-**[TÄIDA]** Kontrolli plugina nimi, meetodid ja keel oma koodist.
+Plugin: `@capacitor-community/speech-recognition`. **[TÄIDA]** Kontrolli meetodid ja keel oma koodist.
 
 ### 3.3 Mälu ja elutsükkel (GC, mitte ARC)
 
@@ -149,11 +149,11 @@ TS-i tüübid on ainus "leping" JS-i ja natiivi vahel, natiivne pool seda ei kon
 | Teek | Milleks | Eripära |
 |---|---|---|
 | `@ionic/core` | UI komponendid | Web Components, shadow DOM, iOS/Material stiilid |
-| `ionicons` | Ikoonid | SVG custom element'id |
+| `ionicons` | Ionic'u ikoonid | SVG-põhised ikoonid, kasutatakse `<ion-icon>` elemendina |
 | `@capacitor/core` | Sild, `registerPlugin` | Promise-põhine |
-| **[TÄIDA]** kõnetuvastuse plugin | Mikrofon | Load, natiivne Swift/Kotlin pool |
+| `@capacitor-community/speech-recognition` | Kõnetuvastus | Vajab mikrofoniluba, tulemused tulevad listener'iga (`partialResults`), natiivne Swift/Kotlin pool |
+| `@capacitor/preferences` | Püsiv salvestus (võti-väärtus) | Väärtused on stringid ja asünkroonsed (`value: string \| null`), seega JSON-i valideerimine on vajalik |
 | Vite | Ehitus | Lazy-loaded Ionic komponendid |
-| **[TÄIDA]** | | |
 
 ## 6. Allikad
 
