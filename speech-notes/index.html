@@ -38,23 +38,23 @@
       </ion-header>
 
       <ion-content id="main-content">
-        <div class="editor">
-          <p id="live-text"></p>
-          <ion-textarea
-            id="draft"
-            label="Märkus"
-            label-placement="stacked"
-            fill="outline"
-            auto-grow="true"
-            rows="2"
-          ></ion-textarea>
-          <div class="editor-actions">
-            <ion-button id="save-btn" size="small">Salvesta</ion-button>
-            <ion-button id="cancel-btn" size="small" fill="outline">Tühista</ion-button>
-          </div>
-        </div>
 
         <div id="notes-view">
+          <div class="editor">
+            <p id="live-text"></p>
+            <ion-textarea
+              id="draft"
+              label="Märkus"
+              label-placement="stacked"
+              fill="outline"
+              auto-grow="true"
+              rows="2"
+            ></ion-textarea>
+            <div class="editor-actions">
+              <ion-button id="save-btn" size="small">Salvesta</ion-button>
+              <ion-button id="cancel-btn" size="small" fill="outline">Tühista</ion-button>
+            </div>
+          </div>
           <div id="notes-list"></div>
         </div>
 
