@@ -1,0 +1,291 @@
+﻿/* Black & white theme.
+   Ionic components use shadow DOM, so outer selectors can't reach their
+   internals. Use Ionic CSS variables (they pierce the shadow boundary)
+   and ::part() for the few things variables don't cover. */
+
+:root {
+  --ion-background-color: #ffffff;
+  --ion-text-color: #000000;
+
+  --ion-color-primary: #000000;
+  --ion-color-primary-rgb: 0, 0, 0;
+  --ion-color-primary-contrast: #ffffff;
+  --ion-color-primary-contrast-rgb: 255, 255, 255;
+  --ion-color-primary-shade: #000000;
+  --ion-color-primary-tint: #333333;
+
+  --ion-toolbar-background: #ffffff;
+  --ion-toolbar-color: #000000;
+  --ion-item-background: #ffffff;
+  --ion-item-color: #000000;
+  --ion-border-color: #000000;
+}
+
+/* Per-component variables set on the host are inherited inside the shadow root */
+ion-toolbar {
+  --background: #ffffff;
+  --color: #000000;
+}
+
+ion-content {
+  --background: #ffffff;
+  --color: #000000;
+}
+
+ion-list {
+  --background: #ffffff;
+  --border-width: 2px;
+  --border-style: solid;
+  --border-radius: 8px;
+  --border-color: #000000;
+  --padding-top: 16px;
+  --padding-bottom: 16px;
+}
+
+ion-item {
+  --background: #ffffff;
+  --border-width: 2px;
+  --border-style: solid;
+  --border-radius: 8px;
+  --color: #000000;
+  --border-color: #000000;
+  --padding-top: 3px;
+}
+
+ion-button {
+  --background: #000000;
+  --color: #ffffff;
+  --border-radius: 10px;
+  --border-width: 2px;
+  --border-style: solid;
+  --border-color: #000000;
+  --background-hover: #ffffff;
+  --color-hover: #000000; /* fixed: was #ffffff, which made hover text invisible on a white hover background */
+  --background-activated: #ffffff;
+  --color-activated: #000000;
+}
+
+ion-button[fill='outline'] {
+  --background: #ffffff;
+  --color: #000000;
+}
+
+/* ::part() reaches elements Ionic exposes from its shadow DOM */
+ion-button::part(native) {
+  text-transform: none;
+  letter-spacing: 0.5px;
+}
+
+ion-input,
+ion-textarea {
+  --background: #ffffff;
+  --color: #000000;
+  --placeholder-color: #666666;
+  --placeholder-opacity: 1;
+}
+
+/* Layout: two-column masonry of grey note cards, floating record pill */
+ion-title {
+  font-weight: 700;
+}
+
+/* Header avatar */
+.header-avatar {
+  width: 32px;
+  height: 32px;
+  margin-inline-start: 4px;
+}
+.header-avatar ion-icon {
+  width: 100%;
+  height: 100%;
+  color: #000000;
+}
+
+/* Segment control — underline style matching the reference image */
+.segment-toolbar {
+  --background: #ffffff;
+  --min-height: 40px;
+  padding-top: 0;
+}
+
+ion-segment {
+  --background: #ffffff;
+}
+
+ion-segment-button {
+  --color: #666666;
+  --color-checked: #000000;
+  --indicator-color: transparent;
+  --border-radius: 0;
+  text-transform: none;
+  font-weight: 600;
+  min-height: 36px;
+}
+
+#search-btn,
+#clear-btn {
+  --border-width: 0;
+  --background: transparent;
+  --color: #000000;
+}
+
+#modal-back {
+  --border-width: 0;
+  --background: transparent;
+  --color: #000000;
+}
+#modal-back::part(native) {
+  padding-inline-start: 4px;
+}
+
+/* Underline on the checked segment button — overrides Ionic's default
+   pill indicator with a bottom-border using the exposed part */
+ion-segment-button::part(indicator-background) {
+  background: #000000;
+  height: 2px;
+  align-self: flex-end;
+}
+
+.editor {
+  padding: 12px 16px 0;
+}
+
+.editor-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+/* Notes list — two-column masonry of ion-card notes */
+#notes-list {
+  columns: 2;
+  column-gap: 12px;
+  padding: 16px 16px 96px;
+}
+
+ion-card.note-card {
+  --background: #f2f2f2;
+  --color: #000000;
+  break-inside: avoid;
+  margin: 0 0 12px;
+  box-shadow: none;
+  border-radius: 8px;
+}
+
+ion-card.note-card ion-card-content {
+  padding: 12px;
+}
+
+ion-card.note-card ion-note {
+  display: block;
+  font-size: 11px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  --color: #666666;
+}
+
+ion-card.note-card p {
+  margin: 6px 0 8px;
+  font-size: 14px;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
+.note-actions {
+  display: flex;
+  gap: 4px;
+  margin-left: -8px;
+}
+
+.note-actions ion-button {
+  --color: #000000;
+  --background: transparent;
+  --background-hover: #e0e0e0;
+  --border-width: 0;
+  font-size: 12px;
+}
+
+/* Empty state for the Folders tab */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 64px 16px;
+  color: #666666;
+}
+.empty-state ion-icon {
+  font-size: 48px;
+}
+
+ion-fab ion-button {
+  --border-radius: 8px;
+  --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Detail modal: card-style sheet (breakpoints set in main.ts), so the
+   border-radius is visible on the top corners instead of being clipped */
+ion-modal#note-modal {
+  --background: #ffffff;
+  --border-radius: 16px;
+  --box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.15);
+}
+
+.detail {
+  padding: 8px 20px 24px;
+}
+
+.detail h1 {
+  margin: 8px 0 16px;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.detail-meta {
+  display: grid;
+  grid-template-columns: 110px 1fr;
+  row-gap: 10px;
+  margin: 0;
+  font-size: 13px;
+}
+
+.detail-meta dt {
+  color: #666666;
+}
+
+.detail-meta dd {
+  margin: 0;
+}
+
+.detail hr {
+  border: 0;
+  border-top: 1px solid #e0e0e0;
+  margin: 16px 0;
+}
+
+#detail-text {
+  font-size: 15px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.detail-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 24px;
+}
+
+/* Ionic sets radius/shadow on :host(.button-solid/.button-small); raise specificity to win */
+ion-button.button-solid,
+ion-button.button-small,
+ion-button.button-outline {
+  --border-radius: 8px;
+  --box-shadow: none;
+}
+
+ion-fab ion-button.button-solid {
+  --border-radius: 8px;
+  --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
