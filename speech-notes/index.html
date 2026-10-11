@@ -65,23 +65,15 @@
           </div>
         </div>
 
-        <ion-fab slot="fixed" vertical="bottom" horizontal="center">
-          <ion-button id="record-btn" shape="round">
-            <ion-icon slot="start" name="mic"></ion-icon>
-            <span id="record-label">Räägi märkus</span>
-          </ion-button>
-        </ion-fab>
-      </ion-content>
-
-      <ion-modal id="note-modal" handle="true">
-        <ion-header class="ion-no-border">
-          <ion-toolbar>
+        <div id="detail-view" class="ion-hide">
+          <ion-toolbar class="detail-toolbar">
             <ion-buttons slot="start">
-              <ion-button id="modal-back">&lsaquo; Kõik märkused</ion-button>
+              <ion-button id="modal-back">
+                <ion-icon slot="start" name="chevron-back"></ion-icon>
+                Kõik märkused
+              </ion-button>
             </ion-buttons>
           </ion-toolbar>
-        </ion-header>
-        <ion-content>
           <div class="detail">
             <h1 id="detail-title"></h1>
             <dl class="detail-meta">
@@ -97,8 +89,17 @@
               <ion-button id="detail-delete" fill="outline">Kustuta</ion-button>
             </div>
           </div>
-        </ion-content>
-      </ion-modal>
+        </div>
+        
+        <ion-fab slot="fixed" vertical="bottom" horizontal="center">
+          <ion-button id="record-btn" shape="round">
+            <ion-icon slot="start" name="mic"></ion-icon>
+            <span id="record-label">Räägi märkus</span>
+          </ion-button>
+        </ion-fab>
+      </ion-content>
+
+      
     </ion-app>
 
     <script type="module" src="/src/main.ts"></script>

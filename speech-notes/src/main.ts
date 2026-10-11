@@ -14,8 +14,8 @@ import { addIcons } from 'ionicons';
 import { SpeechRecognition } from '@capacitor-community/speech-recognition';
 import { Preferences } from '@capacitor/preferences';
 import { Capacitor } from '@capacitor/core';
-import { mic, stop, search, trash, personCircle, folderOpenOutline } from 'ionicons/icons';
-addIcons({ mic, stop, search, trash, personCircle, folderOpenOutline });
+import { mic, stop, search, trash, personCircle, folderOpenOutline, chevronBack } from 'ionicons/icons';
+addIcons({ mic, stop, search, trash, personCircle, folderOpenOutline, chevronBack });
 
 interface Note {
   id: number;
@@ -34,20 +34,23 @@ const live = document.getElementById('live-text')!;
 const list = document.getElementById('notes-list')!;
 const draft = document.getElementById('draft') as HTMLIonTextareaElement;
 
-const modal = document.getElementById('note-modal') as HTMLIonModalElement;
-modal.breakpoints = [0, 0.5, 0.9];
-modal.initialBreakpoint = 0.9;
-modal.presentingElement = document.getElementById('main-content')!;
 let openNote: Note | null = null;
 
 const segment = document.getElementById('view-segment') as HTMLIonSegmentElement;
 const notesView = document.getElementById('notes-view')!;
 const foldersView = document.getElementById('folders-view')!;
+const detailView = document.getElementById('detail-view')!;
+const segmentToolbar = document.querySelector('.segment-toolbar')!;
+
+function showView(view: 'notes' | 'folders' | 'detail') {
+  notesView.classList.toggle('ion-hide', view !== 'notes');
+  foldersView.classList.toggle('ion-hide', view !== 'folders');
+  detailView.classList.toggle('ion-hide', view !== 'detail');
+  segmentToolbar.classList.toggle('ion-hide', view === 'detail');
+}
 
 segment.addEventListener('ionChange', (ev: any) => {
-  const value = ev.detail.value;
-  notesView.classList.toggle('ion-hide', value !== 'notes');
-  foldersView.classList.toggle('ion-hide', value !== 'folders');
+  showView(ev.detail.value === 'folders' ? 'folders' : 'notes');
 });
 
 async function editNote(n: Note) {
@@ -71,16 +74,16 @@ function openDetail(n: Note) {
   document.getElementById('detail-created')!.textContent = new Date(n.id).toLocaleString('et-EE');
   document.getElementById('detail-length')!.textContent = `${n.text.split(/\s+/).length} sõna`;
   document.getElementById('detail-text')!.textContent = n.text;
-  modal.present();
+  showView('detail');
 }
 
-document.getElementById('modal-back')!.addEventListener('click', () => modal.dismiss());
-document.getElementById('detail-edit')!.addEventListener('click', async () => {
-  await modal.dismiss();
+document.getElementById('modal-back')!.addEventListener('click', () => showView('notes'));
+document.getElementById('detail-edit')!.addEventListener('click', () => {
+  showView('notes');
   if (openNote) editNote(openNote);
 });
-document.getElementById('detail-delete')!.addEventListener('click', async () => {
-  await modal.dismiss();
+document.getElementById('detail-delete')!.addEventListener('click', () => {
+  showView('notes');
   if (openNote) deleteNote(openNote);
 });
 
@@ -259,5 +262,3 @@ document.getElementById('clear-btn')!.addEventListener('click', async () => {
 });
 
 load();
-
-

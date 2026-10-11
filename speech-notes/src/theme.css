@@ -122,6 +122,22 @@ ion-segment-button {
   min-height: 36px;
 }
 
+#search-btn,
+#clear-btn {
+  --border-width: 0;
+  --background: transparent;
+  --color: #000000;
+}
+
+#modal-back {
+  --border-width: 0;
+  --background: transparent;
+  --color: #000000;
+}
+#modal-back::part(native) {
+  padding-inline-start: 4px;
+}
+
 /* Underline on the checked segment button — overrides Ionic's default
    pill indicator with a bottom-border using the exposed part */
 ion-segment-button::part(indicator-background) {
