@@ -10,7 +10,7 @@ import '@ionic/core/css/flex-utils.css';
 import '@ionic/core/css/display.css';
 import './theme.css'
 
-import { alertController } from '@ionic/core';
+import { alertController, toastController} from '@ionic/core';
 import { addIcons } from 'ionicons';
 import { SpeechRecognition } from '@capacitor-community/speech-recognition';
 import { Preferences } from '@capacitor/preferences';
@@ -522,6 +522,28 @@ function deleteNote(n: Note) {
   renderFolders();
 }
 
+async function showToast(message: string, color: 'success' | 'danger' = 'success') {
+  const toast = await toastController.create({ message, color, duration: 2500, position: 'bottom' });
+  await toast.present();
+}
+
+function setLoading(btn: HTMLElement, loading: boolean, label: string) {
+  btn.toggleAttribute('disabled', loading);
+  btn.innerHTML = loading ? '<ion-spinner name="dots"></ion-spinner>' : label;
+}
+
+async function translateNote(text: string): Promise<string> {
+  const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text.slice(0, 450))}&langpair=et|en`;
+
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`Server vastas: ${res.status}`);
+
+  const data = await res.json();
+  if (data.responseStatus !== 200) throw new Error(data.responseDetails);
+
+  return data.responseData.translatedText;
+}
+
 function openDetail(n: Note) {
   openNote = n;
   const firstLine = n.text.split(/[.!?\n]/)[0].trim();
@@ -542,6 +564,24 @@ document.getElementById('detail-edit')!.addEventListener('click', () => {
 document.getElementById('detail-delete')!.addEventListener('click', () => {
   showView('notes');
   if (openNote) deleteNote(openNote);
+});
+
+const translateBtn = document.getElementById('detail-translate')!;
+
+translateBtn.addEventListener('click', async () => {
+  if (!openNote) return;
+
+  setLoading(translateBtn, true, 'Tõlgi inglise keelde');
+  try {
+    const translation = await translateNote(openNote.text);
+    document.getElementById('detail-translation-text')!.textContent = translation;
+    document.getElementById('detail-translation')!.classList.remove('ion-hide');
+  } catch (err) {
+    console.error('Tõlkimine ebaõnnestus', err);
+    showToast('Tõlkimine ebaõnnestus', 'danger');
+  } finally {
+    setLoading(translateBtn, false, 'Tõlgi inglise keelde');
+  }
 });
 
 function render() {
